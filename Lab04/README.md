@@ -8,7 +8,7 @@
     </ul>
     ```
 
-1. 打開 `todo-input.component.html`，修改資料輸入畫面 
+2. 打開 `todo-input.component.html`，修改資料輸入畫面 
 
     ``` html
     <label for="content">Content:</label>
@@ -16,4 +16,4 @@
     <button type="button">Submit</button>
     ```
 
-1. 開啟網頁，觀看結果
+3. 開啟網頁，觀看結果

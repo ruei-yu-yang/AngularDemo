@@ -1,28 +1,84 @@
-# LAB08
+# Lab08 - 練習使用 RouterModule
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.3.
+1. 打開 `app.module.ts`，import Routes 和 RouterModule
 
-## Development server
+    ``` typescript
+    import { Routes, RouterModule } from '@angular/router';
+    ```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+2. 打開 `app.module.ts`，新增 Routes 設定
 
-## Code scaffolding
+    ``` typescript
+    const routes: Routes =[
+        { path: '', redirectTo: '/todo', pathMatch: 'full' },
+        { path: 'todo', component: TodoComponent },
+        { path: 'todo-detail/:id', component: TodoDetailComponent },
+    ];
+    ```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
+3. 把 `RouterModule` 加入 imports
 
-## Build
+    ``` typescript
+    imports: [
+        BrowserModule,
+        FormsModule,
+        HttpModule,
+        RouterModule.forRoot(routes)
+    ],
+    ```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+4. 打開 `app.component.html`，加入 Router 呈現的地方
 
-## Running unit tests
+    ```
+    <h1>
+        TodoList
+    </h1>
+    <router-outlet></router-outlet>
+    ```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+5. 打開 `todo-detai.component.ts`，透過網址的 `id` 來讀取 Todo 資料
 
-## Running end-to-end tests
+    ``` typescript
+    import { Component, OnInit } from '@angular/core';
+    import { ActivatedRoute, Params } from '@angular/router';
+    import { Todo } from '../../models/todo';
+    import { TodoService } from '../../services/todo.service';
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+    @Component({
+        selector: 'app-todo-detail',
+        templateUrl: './todo-detail.component.html',
+        styleUrls: ['./todo-detail.component.css']
+    })
+    export class TodoDetailComponent implements OnInit {
+        todo: Todo;
 
-## Further help
+        constructor(
+            private route: ActivatedRoute,
+            private todoService: TodoService,
+        ) { }
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+        ngOnInit() {
+            this.route.params.forEach((params: Params) => {
+                let id = params['id'];
+                this.todoService.getTodo(id)
+                    .then((todo)=>{          
+                        this.todo = todo;
+                    })
+            });
+        }
+    }
+    ```
+
+6. 打開 `todo-detail.component.html`，增加回到列表的超連結
+
+    ``` html
+    <a [routerLink]="'/todo'">Back to list</a>
+    ```    
+
+7. 打開 `todo-list.component.html`，新增詳細頁面的連結
+
+    ``` html
+    <li *ngFor="let todo of todoList">
+        <a [routerLink]="['/todo-detail', todo.id]">{{ todo.content}}</a>
+    </li>
+    ```
