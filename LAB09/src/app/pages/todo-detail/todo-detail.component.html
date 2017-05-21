@@ -1,0 +1,9 @@
+<div *ngIf="todo">
+  <a [routerLink]="'/todo'">Back to List</a>
+<hr>
+  <label for="id">Id:</label>
+  <p>{{todo.id}}</p>
+
+  <label for="id">Content:</label>
+  <p>{{todo.content}}</p>
+</div>
