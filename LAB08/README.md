@@ -69,13 +69,23 @@
     }
     ```
 
-6. 打開 `todo-detail.component.html`，增加回到列表的超連結
+6. 打開 `todo.service.ts` ，增加 getTodo 方法
+    ``` typescript
+      getTodo(id: number): Promise<Todo> {
+        var url = `http://st-todo.herokuapp.com/todos/${id}`;
+        return this.http.get(url)
+          .toPromise()
+          .then(response => response.json() as Todo);
+      }
+    ```  
+
+7. 打開 `todo-detail.component.html`，增加回到列表的超連結
 
     ``` html
     <a [routerLink]="'/todo'">Back to list</a>
     ```    
 
-7. 打開 `todo-list.component.html`，新增詳細頁面的連結
+8. 打開 `todo-list.component.html`，新增詳細頁面的連結
 
     ``` html
     <li *ngFor="let todo of todoList">
